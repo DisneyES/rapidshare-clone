@@ -2,47 +2,79 @@ require 'test_helper'
 
 class UploadsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @upload = uploads(:one)
+    DatabaseCleaner.clean
+    @user = create :user, :with_password
+    @upload = create :upload, :with_file, user: @user
   end
 
-  test "should get index" do
+  def test_must_get_current_user_uploaded_files_on_index
+    sign_in(@user)
+
     get uploads_url
+
+    assert_equal [@upload], assigns(:uploads)
     assert_response :success
   end
 
-  test "should get new" do
-    get new_upload_url
+  def test_must_not_get_other_user_uploaded_files_on_index
+    another_upload = build :upload, :with_file, user: create(:user, :with_password)
+    sign_in(@user)
+
+    get uploads_url
+
+    assert_equal [@upload], assigns(:uploads)
     assert_response :success
   end
 
-  test "should create upload" do
-    assert_difference('Upload.count') do
-      post uploads_url, params: { upload: { file: @upload.file, user_id: @upload.user_id } }
+  def test_must_upload_file_on_create
+    filename = "sample.png"
+    file = Rack::Test::UploadedFile.new("test/fixtures/#{filename}", "image/png")
+    sign_in(@user)
+
+    assert_difference 'Upload.count' do
+      post uploads_url, params: {upload: {file: file}}
     end
 
-    assert_redirected_to upload_url(Upload.last)
-  end
-
-  test "should show upload" do
-    get upload_url(@upload)
-    assert_response :success
-  end
-
-  test "should get edit" do
-    get edit_upload_url(@upload)
-    assert_response :success
-  end
-
-  test "should update upload" do
-    patch upload_url(@upload), params: { upload: { file: @upload.file, user_id: @upload.user_id } }
-    assert_redirected_to upload_url(@upload)
-  end
-
-  test "should destroy upload" do
-    assert_difference('Upload.count', -1) do
-      delete upload_url(@upload)
-    end
+    new_upload = assigns(:upload)
+    assert_equal filename, new_upload.file.file.filename
 
     assert_redirected_to uploads_url
+  end
+
+  def test_must_not_upload_invalid_file_on_create
+    filename = "sample.png"
+    sign_in(@user)
+
+    assert_no_difference 'Upload.count' do
+      post uploads_url, params: {upload: {file: filename}}
+    end
+
+    assert_equal false,assigns(:upload).persisted?
+    assert_redirected_to uploads_url
+  end
+
+  def test_must_remove_file_on_destroy
+    sign_in(@user)
+
+    assert_difference 'Upload.count', -1 do
+      delete upload_url(@upload)
+    end
+    assert_redirected_to uploads_url
+  end
+
+  def test_must_not_remove_another_users_file_on_destroy
+    another_user = create(:user, :with_password)
+    sign_in(another_user)
+
+    assert_raise 'ActiveRecord::RecordNotFound' do
+      delete upload_url(@upload)
+    end
+  end
+
+  def test_must_download_file
+    sign_in(@user)
+
+    get download_upload_url(@upload)
+    assert_response :success
   end
 end
