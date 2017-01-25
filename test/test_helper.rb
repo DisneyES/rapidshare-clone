@@ -6,6 +6,7 @@ require 'database_cleaner'
 DatabaseCleaner.strategy = :truncation
 
 class ActiveSupport::TestCase
+  include Rails.application.routes.url_helpers
   include FactoryGirl::Syntax::Methods
 
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
