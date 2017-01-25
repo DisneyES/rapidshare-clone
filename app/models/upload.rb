@@ -4,6 +4,6 @@ class Upload < ApplicationRecord
   has_secure_token :access_token
 
   belongs_to :user
-  validates :file, :access_token, presence: true
-  validates :access_token, uniqueness: true
+  validates :file, presence: true
+  validates :access_token, presence: true, uniqueness: true, on: :update
 end
