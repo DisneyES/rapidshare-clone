@@ -22,3 +22,4 @@
 
 # Ignore public uploads folder
 /public/uploads/*
+.DS_Store
