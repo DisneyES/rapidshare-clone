@@ -1,0 +1,15 @@
+.center-box.signin
+  %h3.text-center Sign In
+
+  = form_for :session, url: sessions_path, html: {class: 'form'} do |f|
+    .form-group
+      = f.label :email
+      = f.email_field :email, class: 'form-control'
+
+    .form-group
+      = f.label :password
+      = f.password_field :password, class: 'form-control'
+
+    .text-center
+      = link_to "Sign Up", new_user_path, class: 'btn btn-primary'
+      = f.submit "Sign In", class: 'btn btn-success'
