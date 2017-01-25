@@ -1,0 +1,35 @@
+.center-box.signup
+  %h3.text-center Sign Up
+
+  = form_for @user, html: {class: 'form'} do |f|
+    .form-group{class: (@user.errors[:name].presence && 'has-error')}
+      = f.label :name
+      = f.text_field :name, class: 'form-control'
+      - if @user.errors[:name].present?
+        %span{id: "help-block-name", class: "help-block"}
+          = @user.errors.full_messages_for(:name).join(', ')
+
+    .form-group{class: (@user.errors[:email].presence && 'has-error')}
+      = f.label :email
+      = f.email_field :email, class: 'form-control'
+      - if @user.errors[:email].present?
+        %span{id: "help-block-email", class: "help-block"}
+          = @user.errors.full_messages_for(:email).join(', ')
+
+    .form-group{class: (@user.errors[:password].presence && 'has-error')}
+      = f.label :password
+      = f.password_field :password, class: 'form-control'
+      - if @user.errors[:password].present?
+        %span{id: "help-block-password", class: "help-block"}
+          = @user.errors.full_messages_for(:password).join(', ')
+
+    .form-group{class: (@user.errors[:password_confirmation].presence && 'has-error')}
+      = f.label :password_confirmation
+      = f.password_field :password_confirmation, class: 'form-control'
+      - if @user.errors[:password_confirmation].present?
+        %span{id: "help-block-password-confirmation", class: "help-block"}
+          = @user.errors.full_messages_for(:password_confirmation).join(', ')
+
+    .text-center
+      = link_to "Sign In", new_session_path, class: 'btn btn-primary'
+      = f.submit "Sign Up", class: 'btn btn-success'
