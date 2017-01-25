@@ -7,9 +7,11 @@ Rails.application.routes.draw do
   end
   get "files/:id" => "uploads#download", as: :public_download
 
-  resources :sessions, only: [:new, :create, :destroy]
+  resources :sessions, only: [:create]
   resources :users, only: [:new, :create]
 
   get '/login' => 'sessions#new'
+  delete '/logout' => 'sessions#destroy'
+
   root to: 'uploads#index'
 end

@@ -31,5 +31,5 @@
           = @user.errors.full_messages_for(:password_confirmation).join(', ')
 
     .text-center
-      = link_to "Sign In", new_session_path, class: 'btn btn-primary'
+      = link_to "Sign In", login_path, class: 'btn btn-primary'
       = f.submit "Sign Up", class: 'btn btn-success'

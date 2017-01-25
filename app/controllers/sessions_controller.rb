@@ -17,8 +17,13 @@ class SessionsController < ApplicationController
     end
   end
 
-  def destroy 
-    session[:user_id] = nil
-    redirect_to new_session_path, notice: "Signed out successfully."
+  def destroy
+    if current_user
+      session.clear
+      flash[:notice] = "Signed out successfully."
+    else
+      flash[:error] = "You are not authorized to view this page."
+    end
+    redirect_to new_session_path
   end
 end
