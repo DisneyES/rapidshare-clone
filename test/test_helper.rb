@@ -15,3 +15,7 @@ class ActiveSupport::TestCase
   # Add more helper methods to be used by all tests here...
 end
 
+def sign_in(user)
+  post sessions_url, params: {session: {email: user.email, password: user.password}}
+end
+
