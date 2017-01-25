@@ -24,6 +24,6 @@ class SessionsController < ApplicationController
     else
       flash[:error] = "You are not authorized to view this page."
     end
-    redirect_to new_session_path
+    redirect_to login_path
   end
 end
