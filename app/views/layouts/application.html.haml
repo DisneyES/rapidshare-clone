@@ -1,0 +1,25 @@
+!!!
+%html
+  %head
+    %title RapidshareClone
+    = csrf_meta_tags
+
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
+    = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+
+  %body
+    - flash.each do |key, value|
+      - type = key == 'notice' ? 'success' : (key == 'error' ? 'danger' : key)
+      %div{id: 'flash', class: "text-center alert alert-#{type}"}
+        = value
+    - flash.clear
+
+    = render 'header' if params[:controller] != 'sessions' && params[:controller] != 'users'
+    .container
+      = yield
+
+:coffeescript
+  $(document).ready ->
+    window.setTimeout (->
+      $('#flash').fadeOut()
+    ), 5000
