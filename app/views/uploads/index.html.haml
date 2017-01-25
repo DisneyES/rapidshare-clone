@@ -1,0 +1,20 @@
+.row.text-centered
+  = form_for Upload.new, class: 'form-inline' do |f|
+    = f.file_field :file, class: 'hide'
+    .col-lg-8.col-lg-offset-2
+      .form-group
+        .input-group
+          = text_field_tag "file_name", nil,  class: 'form-control', placeholder: 'Choose file to upload...', disabled: true
+          .input-group-btn
+            = button_tag 'Choose', type: 'button', id: 'choose-file-btn', class: 'btn btn-default'
+            = f.submit 'Upload', id: 'upload-file-btn', class: 'btn btn-primary', disabled: true
+
+%h3.text-center My files
+
+- @uploads.each_slice(6) do |upload_group|
+  .row
+    - upload_group.each do |upload|
+      = render 'upload', upload: upload
+
+
+#share-modal.modal.fade.hide{:role => "dialog", :tabindex => "-1"}

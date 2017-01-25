@@ -1,0 +1,26 @@
+// Place all the styles related to the Uploads controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.hide { display: none; }
+
+.file-upload {
+  height: 250px;
+  .file-name {
+    text-align: center;
+    font-size: 12px;
+    height: 34px;
+    word-wrap: break-word;
+  }
+
+  .file-placeholder {
+    height: 125px;
+    width: 150px;
+    text-align: center;
+    line-height: 125px;
+    img {
+      max-width: 100%;
+      max-height: 100%;
+    }
+  }
+}

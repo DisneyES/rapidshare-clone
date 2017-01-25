@@ -1,0 +1,3 @@
+$("#share-modal").html("#{escape_javascript(render 'share', upload: @upload)}");
+$("#share-modal").removeClass('hide');
+$("#share-modal").modal('show');
