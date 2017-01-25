@@ -9,11 +9,11 @@ class UploadsController < ApplicationController
     @upload = current_user.uploads.new(upload_params)
 
     if @upload.save
-      redirect_to uploads_path, notice: 'File was successfully uploaded.'
+      flash[:notice] = 'File was successfully uploaded.'
     else
       flash[:error] = 'Unable to upload file.'
-      render nothing: true
     end
+    redirect_to uploads_path
   end
 
   def destroy
