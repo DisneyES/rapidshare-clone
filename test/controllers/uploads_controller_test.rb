@@ -36,7 +36,7 @@ class UploadsControllerTest < ActionDispatch::IntegrationTest
     end
 
     new_upload = assigns(:upload)
-    assert_equal filename, new_upload.file.file.filename
+    assert_equal filename, new_upload.file
 
     assert_redirected_to uploads_url
   end
@@ -46,10 +46,9 @@ class UploadsControllerTest < ActionDispatch::IntegrationTest
     sign_in(@user)
 
     assert_no_difference 'Upload.count' do
-      post uploads_url, params: {upload: {file: filename}}
+      post uploads_url, params: {upload: {file: nil}}
     end
 
-    assert_equal false,assigns(:upload).persisted?
     assert_redirected_to uploads_url
   end
 

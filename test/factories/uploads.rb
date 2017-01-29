@@ -5,6 +5,7 @@ FactoryGirl.define do
 
     trait :with_file do
       file { Rack::Test::UploadedFile.new("test/fixtures/sample.png", "image/png") }
+      content_type "image/png"
     end
   end
 end
