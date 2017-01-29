@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170124141609) do
+ActiveRecord::Schema.define(version: 20170129142826) do
 
   create_table "uploads", force: :cascade do |t|
     t.string   "file"
@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(version: 20170124141609) do
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
     t.string   "access_token"
+    t.string   "content_type"
     t.index ["access_token"], name: "index_uploads_on_access_token", unique: true
     t.index ["user_id"], name: "index_uploads_on_user_id"
   end
