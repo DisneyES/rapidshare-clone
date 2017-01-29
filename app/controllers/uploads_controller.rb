@@ -6,9 +6,19 @@ class UploadsController < ApplicationController
   end
 
   def create
-    @upload = current_user.uploads.new(upload_params)
+    uploaded_file = params[:upload].presence && params[:upload][:file]
+    redirect_to uploads_path, error: 'Unable to upload file.' and return unless uploaded_file.present?
+
+    @upload = Upload.new.tap do |u|
+      u.user = current_user
+      u.file = uploaded_file.original_filename
+      u.content_type = uploaded_file.content_type
+    end
 
     if @upload.save
+      FileUtils.mkdir_p(@upload.storage_path) unless Dir.exist?(@upload.storage_path)
+      File.open(@upload.file_path, 'wb') {|f| f.write(uploaded_file.read) }
+
       flash[:notice] = 'File was successfully uploaded.'
     else
       flash[:error] = 'Unable to upload file.'
@@ -27,7 +37,7 @@ class UploadsController < ApplicationController
 
   def download
     if @upload.file?
-      send_data @upload.file.file.path, filename: @upload.file.file.filename
+      send_file @upload.file_path, filename: @upload.file
     else
       flash[:error] = "File not found."
       render nothing: true
@@ -45,9 +55,5 @@ class UploadsController < ApplicationController
               else
                 current_user.uploads.find(params[:id])
               end
-  end
-
-  def upload_params
-    params.require(:upload).permit(:file)
   end
 end

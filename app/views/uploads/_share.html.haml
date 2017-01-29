@@ -6,7 +6,7 @@
       %h4.modal-title Public Url
     .modal-body
       %p
-        Your public url for #{upload.file.file.filename} is
+        Your public url for #{upload.file} is
         %br
         = "#{request.base_url}/files/#{upload.access_token}"
     .modal-footer

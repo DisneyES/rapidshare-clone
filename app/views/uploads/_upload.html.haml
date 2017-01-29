@@ -1,18 +1,18 @@
 .file-upload.col-xs-6.col-md-2
   .thumbnail
     .file-name
-      = upload.file.file.filename
+      = upload.file
     .hr-separator
     .file-placeholder
-      - if upload.file.file.content_type.include?('image')
-        = image_tag upload.file.url
+      - if upload.content_type&.include?('image')
+        = image_tag upload.file_url
       - else
         = image_tag 'placeholder.png'
     .hr-separator
     .row.text-center
       = link_to share_upload_path(upload), class: 'btn btn-info', remote: true do
         %i.glyphicon.glyphicon-share
-      = link_to download_upload_path(upload), class: 'btn btn-primary' do
+      = link_to download_upload_path(upload), class: 'btn btn-primary', target: '_blank' do
         %i.glyphicon.glyphicon-download-alt
       = link_to upload, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' do
         %i.glyphicon.glyphicon-remove
