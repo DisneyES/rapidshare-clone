@@ -27,6 +27,11 @@ class UploadsController < ApplicationController
   end
 
   def destroy
+    unless @upload.present?
+      flash[:error] = "File not found."
+      redirect_to uploads_url and return
+    end
+
     if @upload.destroy
       flash[:notice] = 'File was successfully deleted.'
     else
@@ -36,24 +41,26 @@ class UploadsController < ApplicationController
   end
 
   def download
-    if @upload.file?
+    if @upload.present? && @upload.file?
       send_file @upload.file_path, filename: @upload.file
     else
       flash[:error] = "File not found."
-      render nothing: true
+      redirect_to uploads_url
     end
   end
 
   def share
+    head :not_found and return unless @upload.present?
   end
 
   private
 
   def get_upload
+    uploads = Upload.where(id: params[:id], user_id: current_user.id)
     @upload = if params[:action] == 'download'
-                Upload.where(id: params[:id], user_id: current_user.id).or(Upload.where(access_token: params[:id])).first
+                uploads.or(Upload.where(access_token: params[:id])).first
               else
-                current_user.uploads.find(params[:id])
+                uploads.first
               end
   end
 end

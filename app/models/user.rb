@@ -5,5 +5,5 @@ class User < ApplicationRecord
   validates :password, confirmation: true, length: {minimum: 6}, on: :create
   validates :password_confirmation, presence: true, if: 'password.present?'
 
-  has_many :uploads
+  has_many :uploads, dependent: :destroy
 end
