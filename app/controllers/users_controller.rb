@@ -2,6 +2,7 @@ class UsersController < ApplicationController
   skip_before_action :authenticate, only: [:new, :create]
 
   def new
+    redirect_to root_path and return if current_user.present?
     @user = User.new
   end
 
