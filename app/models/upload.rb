@@ -1,6 +1,8 @@
 class Upload < ApplicationRecord
   BLACKLISTED_EXTENSIONS = ["js"]
 
+  attr_accessor :uploaded_file
+
   has_secure_token :access_token
 
   belongs_to :user
@@ -8,6 +10,11 @@ class Upload < ApplicationRecord
   validates :file, :content_type, presence: true
   validates :access_token, presence: true, uniqueness: true, on: :update
 
+  validate do
+    self.errors.add(:file, "upload must be present.") unless uploaded_file.present?
+  end
+
+  after_save :persist_file
   after_destroy :remove_file
 
   def file_url
@@ -36,6 +43,11 @@ class Upload < ApplicationRecord
 
   def storage_url
     "uploads/#{self.class.to_s.underscore}/file/#{self.id}"
+  end
+
+  def persist_file
+    FileUtils.mkdir_p(storage_path) unless Dir.exist?(storage_path)
+    File.open(file_path, 'wb') {|f| f.write(uploaded_file.read) }
   end
 
   def remove_file

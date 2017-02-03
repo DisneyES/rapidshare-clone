@@ -7,18 +7,16 @@ class UploadsController < ApplicationController
 
   def create
     uploaded_file = params[:upload].presence && params[:upload][:file]
-    redirect_to uploads_path, error: 'Unable to upload file.' and return unless uploaded_file.present?
+    redirect_to uploads_path, alert: 'Unable to upload file.' and return unless uploaded_file.present?
 
     @upload = Upload.new.tap do |u|
       u.user = current_user
       u.file = uploaded_file.original_filename
       u.content_type = uploaded_file.content_type
+      u.uploaded_file = uploaded_file
     end
 
     if @upload.save
-      FileUtils.mkdir_p(@upload.storage_path) unless Dir.exist?(@upload.storage_path)
-      File.open(@upload.file_path, 'wb') {|f| f.write(uploaded_file.read) }
-
       flash[:notice] = 'File was successfully uploaded.'
     else
       flash[:error] = 'Unable to upload file.'
