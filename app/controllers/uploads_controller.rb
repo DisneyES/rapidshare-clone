@@ -32,7 +32,7 @@ class UploadsController < ApplicationController
 
   def download
     if @upload.present? && @upload.file?
-      send_data @upload.file.file.path, filename: @upload.file.file.filename
+      send_file @upload.file.file.path, filename: @upload.exported_name, disposition: :attachment
     else
       flash[:error] = "File not found."
       redirect_to uploads_url
