@@ -8,6 +8,6 @@ class User < ApplicationRecord
   has_many :uploads, dependent: :destroy
 
   before_validation do
-    self.email.downcase!
+    self.email&.downcase!
   end
 end
