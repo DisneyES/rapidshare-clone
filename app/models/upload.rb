@@ -27,10 +27,9 @@ class Upload < ApplicationRecord
   end
 
   def exported_name
-    fname = self.file.file.filename
-    extn = File.extname(fname)
+    extn = File.extname(file)
     extn.slice!(0)
-    BLACKLISTED_EXTENSIONS.include?(extn) ? "#{fname}.txt" : fname
+    BLACKLISTED_EXTENSIONS.include?(extn) ? "#{file}.txt" : file
   end
 
   private
