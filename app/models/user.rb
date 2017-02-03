@@ -6,4 +6,8 @@ class User < ApplicationRecord
   validates :password_confirmation, presence: true, if: 'password.present?'
 
   has_many :uploads, dependent: :destroy
+
+  before_validation do
+    self.email.downcase!
+  end
 end
