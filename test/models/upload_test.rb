@@ -11,7 +11,14 @@ class UploadTest < ActiveSupport::TestCase
     upload = build :upload, user: @user
 
     assert_equal false, upload.valid?
-    assert_equal ["can't be blank"], upload.errors[:file]
+    assert_equal ["can't be blank", "upload must be present."], upload.errors[:file]
+  end
+
+  def test_upload_file_must_be_present
+    upload = build :upload, user: @user
+
+    assert_equal false, upload.valid?
+    assert_equal ["can't be blank", "upload must be present."], upload.errors[:file]
   end
 
   def test_upload_is_invalid_if_access_token_is_empty_on_update

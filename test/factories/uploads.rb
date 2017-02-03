@@ -4,7 +4,8 @@ FactoryGirl.define do
     association :user
 
     trait :with_file do
-      file { Rack::Test::UploadedFile.new("test/fixtures/sample.png", "image/png") }
+      uploaded_file { Rack::Test::UploadedFile.new("test/fixtures/sample.png", "image/png") }
+      file { uploaded_file.original_filename }
       content_type "image/png"
     end
   end
