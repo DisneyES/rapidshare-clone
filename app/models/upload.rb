@@ -1,4 +1,6 @@
 class Upload < ApplicationRecord
+  BLACKLISTED_EXTENSIONS = ["js"]
+
   has_secure_token :access_token
 
   belongs_to :user
@@ -22,6 +24,13 @@ class Upload < ApplicationRecord
 
   def file?
     file.presence && File.exist?(file_path)
+  end
+
+  def exported_name
+    fname = self.file.file.filename
+    extn = File.extname(fname)
+    extn.slice!(0)
+    BLACKLISTED_EXTENSIONS.include?(extn) ? "#{fname}.txt" : fname
   end
 
   private

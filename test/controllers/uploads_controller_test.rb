@@ -65,9 +65,10 @@ class UploadsControllerTest < ActionDispatch::IntegrationTest
     another_user = create(:user, :with_password)
     sign_in(another_user)
 
-    assert_raise 'ActiveRecord::RecordNotFound' do
+    assert_no_difference 'Upload.count', -1 do
       delete upload_url(@upload)
     end
+    assert_redirected_to uploads_url
   end
 
   def test_must_download_file
