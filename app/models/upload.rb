@@ -26,7 +26,7 @@ class Upload < ApplicationRecord
   end
 
   def storage_path
-    Rails.root.join("public", storage_url)
+    Rails.root.join(storage_url)
   end
 
   def file?
