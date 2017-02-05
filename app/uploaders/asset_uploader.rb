@@ -4,6 +4,7 @@ class AssetUploader < CarrierWave::Uploader::Base
   # include CarrierWave::RMagick
   # include CarrierWave::MiniMagick
 
+  root Rails.root
   # Choose what kind of storage to use for this uploader:
   storage :file
   # storage :fog

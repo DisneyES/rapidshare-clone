@@ -74,7 +74,7 @@ class UploadsControllerTest < ActionDispatch::IntegrationTest
   def test_must_download_file
     sign_in(@user)
 
-    get download_upload_url(@upload)
+    get download_uploaded_file_url(@upload.access_token, @upload.filename)
     assert_response :success
   end
 end
