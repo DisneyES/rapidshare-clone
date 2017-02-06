@@ -54,11 +54,11 @@ class UploadsController < ApplicationController
   private
 
   def get_upload
-    uploads = Upload.where(id: params[:id], user_id: current_user.id)
+    uploads = Upload.where(user_id: current_user.id)
     @upload = if params[:action] == 'download'
-                uploads.or(Upload.where(access_token: params[:id])).first
+                uploads.where(access_token: params[:id]).first
               else
-                uploads.first
+                uploads.where(id: params[:id]).first
               end
   end
 end
